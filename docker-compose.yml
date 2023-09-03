@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  backend:
+    container_name: 'django_backend'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - '8000:8000'
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
+
+  frontend:
+    container_name: "notes_app"
+    build:
+      context: ./mynotes
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1
+
